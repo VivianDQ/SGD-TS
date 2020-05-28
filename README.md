@@ -54,7 +54,7 @@ If ``data`` folder already exists, you should skip this step.
 
 - You can find Yahoo! Today data from [Yahoo! Webscope's official website](https://webscope.sandbox.yahoo.com/). Note that getting this data usually needs Webscope's permission.
 
-- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data'' folder and run the following command inside the ``data`` folder to unzip the file
+- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data`` folder and run the following command inside the ``data`` folder to unzip the file
 
 ```
 tar zxvf Webscope_R6A.tgz
