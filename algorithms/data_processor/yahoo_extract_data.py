@@ -23,7 +23,7 @@ def extract_data():
     lc = 0
     for fn in filename:
         t0 = time.time()
-        print('processing May {} data'.format(fn[-2:]), end = " ")
+        print('processing May {} data'.format(fn[-2:]))
         with gzip.open('data/R6/' + fn + '.gz', "r") as f:
             for line in f:
                 lines = line.split(b"|")

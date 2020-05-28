@@ -46,14 +46,13 @@ rep = args.rep # number of times to repeat experiments
 T = len(features)
 K = 20
 d = 6
-lamda = 1
 model = 'logistic'
 dist = 'ber'
 dtype = 'yahoo'
 if dist != 'ber' and model == 'logistic':
     raise NameError('logistic regression only supports bernoulli reward')
                                  
-print('data: Yahoo, K: around {}, T: {}, dimension: {}'.format(K, T, dim))                   
+print('data: Yahoo, K: around {}, T: {}, dimension: {}'.format(K, T, d))                   
 reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
