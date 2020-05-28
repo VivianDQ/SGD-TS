@@ -26,7 +26,7 @@ Before running the experiments, first make a new directory ``data`` inside the `
 ```
 mkdir data
 ```
-If ``data`` folder already exists, you should skip this step. Then download the Forest cover type data - ``covtype.data.gz`` from [UCI's website](http://archive.ics.uci.edu/ml//machine-learning-databases/covtype/) and save it inside the ``data`` folder. Do not change the name of the data and there is no need to unzip the data.
+If ``data`` folder already exists, you should skip this step. Then download the Forest cover type data - ``covtype.data.gz`` from [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml//machine-learning-databases/covtype/) and save it inside the ``data`` folder. Do not change the name of the data and there is no need to unzip the data.
 
 The experiments on this dataset have two scenarios:
 
@@ -74,7 +74,7 @@ Our implementations will automatically create a ``results`` folder inside the ``
 
 - Simulation results are saved in ``results/simulations_d6_k100`` folder.
 
-- For forest cover type data, the averaged regrets algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d56`` folder respectively. The frequencies for draws of best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d56`` folder.
+- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d56`` folder respectively. The frequencies for draws of best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d56`` folder.
 
 - For Yahoo data, results are saved in ``results/yahoo`` folder.
 
