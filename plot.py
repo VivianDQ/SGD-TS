@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -64,7 +65,7 @@ def draw_figure():
     cat = os.listdir(root)
     paths = []
     for c in cat:
-        if 'covtype' not in c or 'yahoo' not in c or 'simulation' not in c: continue
+        if 'covtype' not in c and 'yahoo' not in c and 'simulation' not in c: continue
         folders = os.listdir(root+c)
         paths.append(root + c + '/')
     for path in paths:
@@ -77,9 +78,8 @@ def draw_figure():
         elif 'covtype' in fn:
             d = int(fn.split('_')[1][1:])
             title = 'Forest Cover Type Data (d = {})'.format(d)
-        elif 'normal' in fn or 'uniform' in fn:
-            _, n_k, dstr, Kstr, theta_dist = fn.split('_')
-            T = int(n_k[:-1]) * 1000
+        elif 'simulation' in fn:
+            _, dstr, Kstr = fn.split('_')
             d = int(dstr[1:])
             K = int(Kstr[1:])
             title = 'Simulation, d={}, K={}'.format(d, K)
