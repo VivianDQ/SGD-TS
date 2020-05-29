@@ -47,7 +47,7 @@ python3 covtype.py -d 55 -t 1000 -center 0 -add 1
 tar zxvf Webscope_R6A.tgz
 ```
 
-- To get the results in the paper, run the following command inside ``code`` folder:
+- To get the results in the paper, run the following command:
 
 ```
 python3 yahoo.py

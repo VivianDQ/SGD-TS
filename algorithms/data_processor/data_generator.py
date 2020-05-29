@@ -22,6 +22,10 @@ class yahoo:
         self.fv = fv 
         self.d = d
         self.reward = reward 
+        # note that we have set the optimal to be 0, and the regret at round t will be negative, 
+        # regret at round t is optimal (0) - reward of pulled arm = -reward
+        # in the plot.py, for yahoo data, we will change the sign back before plotting
+        # this makes the plot to be reward aganist time
         self.optimal = [0 for t in range(self.T)]  
     def ber(self, t, i):
         return np.random.binomial(1, self.reward[t][i])
@@ -46,7 +50,6 @@ class covtype_random_feature:
                 tmpy[i] = self.data[1][data_idx]
             self.fv.append(np.array(tmp))
             self.y.append(tmpy)
-
     def ber(self, t, i):
         return int(self.y[t][i])
         

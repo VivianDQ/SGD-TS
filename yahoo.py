@@ -24,7 +24,7 @@ import warnings
 # silent the following warnings since that the step size in grid search set does not always offer convergence
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 # ignore the following warning since that sklearn logistic regression does not always converge on the data
-# it might because that logistic model is not suitable for the data, this is the case especially for real datasets
+# it might be because that logistic model is not suitable for the data, this is probably the case especially for real datasets
 from  warnings import simplefilter
 from sklearn.exceptions import ConvergenceWarning
 simplefilter("ignore", category=ConvergenceWarning)
@@ -65,17 +65,39 @@ parameters = {
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
 
+times = {
+    'ucb-glm': 0,
+    'sgd-ts': 0,
+    'gloc': 0,
+    'lts': 0
+}
 for i in range(rep):
     print(i, ": ", end = " ")
     np.random.seed(i+1)
-    t0 = time.time()
     bandit = yahoo(rewards, features, d)
     gridsearch = GridSearch(parameters)
+    
+    t0 = time.time()
     reg_ucbglm += gridsearch.tune_ucbglm(bandit, dist, T, d, model)
+    times['ucb-glm'] += (time.time()-t0) / 50
+    
+    t0 = time.time()
     reg_sgdts += gridsearch.tune_sgdts(bandit, dist, T, d, model)
+    times['sgd-ts'] += (time.time()-t0) / 1750
+    
+    t0 = time.time()
     reg_gloc += gridsearch.tune_gloc(bandit, dist, T, d, model)
+    times['gloc'] += (time.time()-t0) / 245
+    
+    t0 = time.time()
     reg_lts += gridsearch.tune_laplacets(bandit, dist, T, d, model)
-    print('cost {} minutes'.format( (time.time() - t0)/60 ))
+    times['lts'] += (time.time()-t0) / 7
+    print(times)
+    # print('cost {} minutes'.format( (time.time() - t0)/60 ))
+
+for k in times:
+    times[k] /= rep
+print('average time: ', times)
 
 result = {
     'ucb-glm': reg_ucbglm/rep,

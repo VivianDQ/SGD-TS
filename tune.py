@@ -4,7 +4,6 @@
 import numpy as np
 import random
 import math
-import time
 from sklearn.linear_model import LogisticRegression
 
 from algorithms.sgd_ts import SGD_TS

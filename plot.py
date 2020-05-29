@@ -99,6 +99,9 @@ def draw_figure():
             data = np.loadtxt(path+key)
             T = len(data)
             if 'yahoo' in path:
+                # take negative sign because the optimal reward at each round in yahoo data is set to 0
+                # regret is optimal (0) - reward of pulled arm
+                # take negative sign will make the regret into reward, so the plot will be reward / t against time
                 data *= -1
                 data = [data[i]/(i+1) for i in range(T)]
                 data = data[1:]
@@ -106,7 +109,7 @@ def draw_figure():
                 y_label = 'Click Through Rate / time'
             plot.plot((list(range(T))), data, linestyle = plot_style[key][0], color = plot_style[key][1], linewidth = 2)
         plot.legend((leg), loc='best', fontsize=16, frameon=False)
-        plot.xlabel('Time')
+        plot.xlabel('Iterations')
         if 'yahoo' in path:
             dates = ['May0'+str(i) for i in range(1,10)] + ['May10'] + ['May11']
             tmpx = list(range(T))
