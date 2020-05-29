@@ -36,7 +36,7 @@ class UCB:
             feature = self.data.fv[t]
             K = len(feature)
             ucb_idx = [0]*K
-            clf = LogisticRegression(penalty = 'none', fit_intercept = False, solver = 'lbfgs').fit(X, y)
+            clf = LogisticRegression(penalty = 'none', max_iter = 4000, fit_intercept = False, solver = 'lbfgs').fit(X, y)
             theta = clf.coef_[0]
             for arm in range(K):
                 ucb_idx[arm] = feature[arm].dot(theta) + explore * math.sqrt( feature[arm].T.dot(B_inv).dot(feature[arm]) )

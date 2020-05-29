@@ -13,7 +13,7 @@ Python3, NumPy, scikit-learn, Matplotlib
 
 ## Simulation
 
-To get the results of simulation in the paper, run the following command inside the ``code`` folder:
+To get the results of simulation in the paper, run the following command:
 
 ```
 python3 run_simulation.py -k 100 -d 6 -t 1000
@@ -21,12 +21,7 @@ python3 run_simulation.py -k 100 -d 6 -t 1000
 
 ## Experiments on Forest cover type data
 
-Before running the experiments, first make a new directory ``data`` inside the ``code`` folder. To do so, run the following command inside the ``code`` folder:
-
-```
-mkdir data
-```
-If ``data`` folder already exists, you should skip this step. Then download the Forest cover type data - ``covtype.data.gz`` from [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml//machine-learning-databases/covtype/) and save it inside the ``data`` folder. Do not change the name of the data and there is no need to unzip the data.
+Before running the experiments, first download the Forest cover type data - ``covtype.data.gz`` from [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml//machine-learning-databases/covtype/) and save it inside the ``data`` folder. Do not change the name of the data and there is no need to unzip the data.
 
 The experiments on this dataset have two scenarios:
 
@@ -44,22 +39,13 @@ python3 covtype.py -d 55 -t 1000 -center 0 -add 1
 
 ## Experiments on Yahoo! Today news artical recommendation data
 
-- Before running the experiments, first make a new directory ``data`` inside the ``code`` folder. To do so, run the following command inside the ``code`` folder:
+- Before running the experiments, first get the data. You can find Yahoo! Today data from [Yahoo! Webscope's official website](https://webscope.sandbox.yahoo.com/). Note that getting this data usually needs Webscope's permission.
 
-```
-mkdir data
-```
-
-If ``data`` folder already exists, you should skip this step.
-
-- You can find Yahoo! Today data from [Yahoo! Webscope's official website](https://webscope.sandbox.yahoo.com/). Note that getting this data usually needs Webscope's permission.
-
-- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data`` folder and run the following command inside the ``data`` folder to unzip the file
+- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data`` folder and run the following command inside the ``data`` folder to unzip the file. If this is successful, you will be able to see an ``R6`` folder inside the ``data`` folder, and it contains 10 days' data from the Yahoo! Today Module.
 
 ```
 tar zxvf Webscope_R6A.tgz
 ```
-If this is successful, you will be able to see an ``R6`` folder inside the ``data`` folder, and it contains 10 days' data from the Yahoo! Today Module.
 
 - To get the results in the paper, run the following command inside ``code`` folder:
 
@@ -70,7 +56,7 @@ python3 yahoo.py
 
 ## Results
 
-Our implementations will automatically create a ``results`` folder inside the ``code`` folder. Numerical results on each data will automatically be saved in separate folder inside ``results`` folder. See the following for details.
+Our implementations will automatically create a ``results`` folder. Numerical results on each data will automatically be saved in separate folder inside ``results`` folder. See the following for details.
 
 - Simulation results are saved in ``results/simulations_d6_k100`` folder.
 
@@ -80,7 +66,7 @@ Our implementations will automatically create a ``results`` folder inside the ``
 
 ## Plots
 
-To produce the same plots as in our paper, run the following command, it will create a ``plots`` folder inside ``code`` folder and the figures will be saved there.
+To produce the same plots as in our paper, run the following command, it will create a ``plots`` folder and the figures will be saved there.
 
 ```
 python3 plot.py

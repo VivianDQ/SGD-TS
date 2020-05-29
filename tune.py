@@ -18,7 +18,6 @@ class GridSearch:
     def tune_ucbglm(self, bandit, dist, T, d, model):
         linucb = getattr(UCB(bandit, dist, T), model)
         best = float('Inf')
-        best_para = None
         reg = None
         for C in self.paras['C']: 
             tau = int(max(d, math.log(T)) * C)
@@ -26,13 +25,11 @@ class GridSearch:
                 tmp = linucb(tau, self.paras['stability'], explore)
                 if tmp[-1] < best:
                     best = tmp[-1]
-                    reg = tmp
-                    best_para = (C, explore)    
+                    reg = tmp 
         return reg
     def tune_sgdts(self, bandit, dist, T, d, model):
         sgd_ts = SGD_TS(bandit, model, dist, T)
         best = float('Inf')
-        best_para = None
         for C in self.paras['C']:
             tau = int(max(d, math.log(T)) * C)
             for eta0 in self.paras['step_size']:  
@@ -42,12 +39,10 @@ class GridSearch:
                         if tmp[-1] < best:
                             reg = tmp
                             best = tmp[-1]
-                            best_para = (C, eta0, g1, g2)
         return reg
     def tune_gloc(self, bandit, dist, T, d, model):
         gloc = GLOC(bandit, model, dist, T)
         best = float('Inf')
-        best_para = None
         for eta in self.paras['step_size']:
             for k in self.paras['step_size']:
                 for c in self.paras['explore']:
@@ -55,19 +50,16 @@ class GridSearch:
                     if tmp[-1] < best:
                         best = tmp[-1]
                         reg = tmp
-                        best_para = (c, k, eta)
         return reg
     def tune_laplacets(self, bandit, dist, T, d, model):
         lts = LAPLACE_TS(bandit, model, dist, T)
         best = float('Inf')
-        best_para = None
         max_ite = 1000
         for eta0 in self.paras['step_size']:
             tmp = lts.laplace_ts(1, eta0, max_ite)
             if tmp[-1] < best:
                 best = tmp[-1]
                 reg = tmp
-                best_para = (eta0, max_ite)
         return reg
 
 
