@@ -10,6 +10,7 @@ To run the code, you will need
 ```
 Python3, NumPy, scikit-learn, Matplotlib
 ```
+Make sure your ``scikit-learn`` version is above ``0.21.2``. Otherwise, ``sklearn.linear_model.LogisticRegression`` might report error when penalty is set to ``none``.
 
 ## Simulation
 

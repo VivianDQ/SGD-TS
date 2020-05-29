@@ -140,12 +140,7 @@ for i in range(rep):
     else:
         bandit = covtype_random_feature(rewards, bandit_data, T, d)
         bandit.build_bandit()  
-    parameters = {
-        'step_size': [0.01, 0.05, 0.1, 0.5, 1, 5, 10],
-        'C': list(range(1,11)),
-        'explore': [0.01, 0.1, 1, 5, 10], 
-        'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
-    }
+        
     gridsearch = GridSearch(parameters)
     
     t0 = time.time()
@@ -198,7 +193,7 @@ if not center:
     name += '_rf'
 if not os.path.exists('results/'):
     os.mkdir('results/')
-if not os.path.exists('../results/' + name + '/'):
+if not os.path.exists('results/' + name + '/'):
     os.mkdir('results/' + name + '/')
 for k,v in result.items():
     np.savetxt('results/' + name + '/' + k, v)       
@@ -209,7 +204,7 @@ if not center:
     name += '_rf'
 if not os.path.exists('results/'):
     os.mkdir('results/')
-if not os.path.exists('../results/' + name + '/'):
+if not os.path.exists('results/' + name + '/'):
     os.mkdir('results/' + name + '/')
 for k,v in frequent.items():
     np.savetxt('results/' + name + '/' + k, v)  
