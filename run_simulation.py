@@ -21,11 +21,6 @@ from algorithms.data_processor.data_generator import *
 import warnings
 # silent the following warnings since that the step size in grid search set does not always offer convergence
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
-# ignore the following warning since that sklearn logistic regression does not always converge on the data
-# it might be because that logistic model is not suitable for the data, this is probably the case especially for real datasets
-# from  warnings import simplefilter
-# from sklearn.exceptions import ConvergenceWarning
-# simplefilter("ignore", category=ConvergenceWarning)
 
 parser = argparse.ArgumentParser(description='simulations')
 parser.add_argument('-t', '--t', type=int, help = 'total time')
