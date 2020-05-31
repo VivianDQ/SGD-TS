@@ -29,9 +29,11 @@ class GLOC:
             grad = A.dot(theta - theta_prime)
             if np.linalg.norm(grad) <= 10**(-4):
                 break
+            if ite%100 == 0:
+                eta /= 2
             theta -= eta * grad
         return theta
-    def Gloc(self, c, S, k, eta, lamda = 1, eps = 1):
+    def Gloc(self, c, k, eta, S = 1, lamda = 1, eps = 1):
         T = self.T
         d = self.data.d
         regret = np.zeros(self.T)

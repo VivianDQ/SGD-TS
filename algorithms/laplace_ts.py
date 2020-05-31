@@ -22,20 +22,19 @@ class LAPLACE_TS:
         for i in range(len(X)):
             g += (w-m)*q - y[i]*X[i] / (1+np.exp(y[i]* X[i].dot(w)))
         return g
-    def optimize(self, w, m, q, X, y, eta0, max_ite):
+    def optimize(self, w, m, q, X, y, eta, max_ite):
         d = self.d
         w = np.zeros(d)
-        eta = eta0
         for i in range(max_ite):
-            if i%100 == 99:
-                eta /= 2
             grad = self.grad(w, q, m, X, y)
             grad_norm = np.linalg.norm(grad)
             if grad_norm <= 10**(-4):
                 break
+            if i%100 == 0:
+                eta /= 2
             w -= eta * grad
         return grad_norm, w 
-    def laplace_ts(self, lamda = 1, eta0 = 0.1, max_ite = 1000):
+    def laplace_ts(self, eta0 = 0.1, lamda = 1, max_ite = 1000):
         T = self.T
         d = self.data.d
         regret = np.zeros(self.T)

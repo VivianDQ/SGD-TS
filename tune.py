@@ -15,13 +15,12 @@ class GridSearch:
     def __init__(self, paras):
         self.paras = paras 
     def tune_ucbglm(self, bandit, dist, T, d, model):
-        linucb = getattr(UCB(bandit, dist, T), model)
+        ucbglm = getattr(UCB(bandit, dist, T), model)
         best = float('Inf')
-        reg = None
         for C in self.paras['C']: 
             tau = int(max(d, math.log(T)) * C)
             for explore in self.paras['explore']: 
-                tmp = linucb(tau, self.paras['stability'], explore)
+                tmp = ucbglm(tau, self.paras['stability'], explore)
                 if tmp[-1] < best:
                     best = tmp[-1]
                     reg = tmp 
@@ -45,7 +44,7 @@ class GridSearch:
         for eta in self.paras['step_size']:
             for k in self.paras['step_size']:
                 for c in self.paras['explore']:
-                    tmp = gloc.Gloc(c, 1, k, eta, lamda = 1, eps = 1)
+                    tmp = gloc.Gloc(c, k, eta)
                     if tmp[-1] < best:
                         best = tmp[-1]
                         reg = tmp
@@ -55,7 +54,7 @@ class GridSearch:
         best = float('Inf')
         max_ite = 1000
         for eta0 in self.paras['step_size']:
-            tmp = lts.laplace_ts(1, eta0, max_ite)
+            tmp = lts.laplace_ts(eta0)
             if tmp[-1] < best:
                 best = tmp[-1]
                 reg = tmp
