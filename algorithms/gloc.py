@@ -26,7 +26,7 @@ class GLOC:
             return theta_prime
         theta = np.zeros(self.d)
         for ite in range(1000):
-            grad = A.dot(theta - theta_prime)
+            grad = 2*A.dot(theta - theta_prime)
             if np.linalg.norm(grad) <= 10**(-4):
                 break
             if ite%100 == 0:
