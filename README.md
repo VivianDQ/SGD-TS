@@ -42,10 +42,12 @@ python3 covtype.py -d 55 -t 1000 -center 0 -add 1
 
 - Before running the experiments, first get the data. You can find Yahoo! Today data from [Yahoo! Webscope's official website](https://webscope.sandbox.yahoo.com/). Note that getting this data usually needs Webscope's permission.
 
-- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data`` folder and run the following command inside the ``data`` folder to unzip the file. If this is successful, you will be able to see an ``R6`` folder inside the ``data`` folder, and it contains 10 days' data from the Yahoo! Today Module.
+- After you get the data ``Webscope_R6A.tgz``, please save it inside the ``data`` folder and run the following command to unzip the file. If this is successful, you will be able to see an ``R6`` folder inside the ``data`` folder, and it contains 10 days' data from the Yahoo! Today Module.
 
 ```
+cd data/
 tar zxvf Webscope_R6A.tgz
+cd ..
 ```
 
 - To get the results in the paper, run the following command:
