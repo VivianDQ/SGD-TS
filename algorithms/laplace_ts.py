@@ -33,7 +33,7 @@ class LAPLACE_TS:
             if i%100 == 0:
                 eta /= 2
             w -= eta * grad
-        return grad_norm, w 
+        return w 
     def laplace_ts(self, eta0 = 0.1, lamda = 1, max_ite = 1000):
         T = self.T
         d = self.data.d
@@ -56,7 +56,7 @@ class LAPLACE_TS:
             regret[t] = regret[t-1] + self.data.optimal[t] - self.data.reward[t][pull]
             y = np.array([2*observe_r - 1])
             X = np.array([feature[pull]])
-            gnorm, w = self.optimize(theta, m, q, X, y, eta0, max_ite) 
+            w = self.optimize(theta, m, q, X, y, eta0, max_ite) 
             m[:] = w[:]
             p = self.mu(feature[pull].dot(w))
             q += p*(1-p)* feature[pull]**2
