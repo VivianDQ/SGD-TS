@@ -19,15 +19,9 @@ class PG_TS_stream:
         d = self.data.d
         regret = np.zeros(self.T)
         b = np.ones(d) * bc
-        B = np.identity(d) * Bc
+        B_inv = np.identity(d) / Bc
         theta = np.random.multivariate_normal(b, B)
-        B_inv = np.linalg.inv(B)
-        B_inv_b = B_inv.dot(b)
-        
         pg = PyPolyaGamma(seed=0)
-        y = np.array([])
-        y = y.astype('int')
-        X = np.empty([0, d])
         
         t = 0
         K = len(self.data.fv[t])
@@ -35,24 +29,26 @@ class PG_TS_stream:
         feature = self.data.fv[t]
         for arm in range(K):
             ts_idx[arm] = feature[arm].dot(theta)
-            
+        
         pull = np.argmax(ts_idx)
         observe_r = self.random_sample(t, pull) 
         regret[t] = regret[t-1] + self.data.optimal[t] - self.data.reward[t][pull]
-        y = np.concatenate((y, [observe_r]), axis = 0)
-        X = np.concatenate((X, [feature[pull]]), axis = 0)
         
         theta_pg = np.zeros(d)
         theta_pg[:] = theta[:]
+        xxt = []
+        xxt.append(np.outer(feature[pull], feature[pull]))
+        xt_k_plus_Bb = (observe_r - 0.5) * feature[pull] + B_inv_b
+        draw_pg = [feature[pull].dot(theta_pg)]
         
         for t in range(1, T):
-            w = []
+            xt_omega_x = np.zeros((d,d))
             for i in range(t):
-                w.append( pg.pgdraw( 1, X[i].dot(theta_pg) ) )
-            omega = np.diag(w)
-            k = y-0.5
-            V = np.linalg.inv(X.T.dot(omega).dot(X) + B_inv)
-            m = V.dot(X.T.dot(k) + B_inv_b)
+                w = pg.pgdraw( 1, draw_pg[i] )
+                xt_omega_x += w * xxt[i]
+            
+            V = np.linalg.inv(xt_omega_x + B_inv)
+            m = V.dot(xt_k_plus_Bb)
             theta_pg = np.random.multivariate_normal(m, V)
             theta[:] = theta_pg[:]
             
@@ -64,7 +60,9 @@ class PG_TS_stream:
             pull = np.argmax(ts_idx)
             observe_r = self.random_sample(t, pull) 
             regret[t] = regret[t-1] + self.data.optimal[t] - self.data.reward[t][pull]
-            y = np.concatenate((y, [observe_r]), axis = 0)
-            X = np.concatenate((X, [feature[pull]]), axis = 0)
+            
+            xt_k_plus_Bb += (observe_r - 0.5) * feature[pull]
+            xxt.append(np.outer(feature[pull], feature[pull]))
+            draw_pg.append( feature[pull].dot(theta_pg) )
         
         return regret
