@@ -19,8 +19,11 @@ class PG_TS_stream:
         d = self.data.d
         regret = np.zeros(self.T)
         b = np.ones(d) * bc
+        B = np.identity(d) * Bc
         B_inv = np.identity(d) / Bc
         theta = np.random.multivariate_normal(b, B)
+        B_inv_b = B_inv.dot(b)
+        
         pg = PyPolyaGamma(seed=0)
         
         t = 0
@@ -29,7 +32,7 @@ class PG_TS_stream:
         feature = self.data.fv[t]
         for arm in range(K):
             ts_idx[arm] = feature[arm].dot(theta)
-        
+            
         pull = np.argmax(ts_idx)
         observe_r = self.random_sample(t, pull) 
         regret[t] = regret[t-1] + self.data.optimal[t] - self.data.reward[t][pull]
