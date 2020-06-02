@@ -59,11 +59,7 @@ reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
 reg_gloc = np.zeros(T)
-reg_pgts = np.zeros(T)
 parameters = {
-        'bc': np.arange(0, 1.1, 0.1),
-        'Bc': np.arange(0.1, 1.1, 0.1),
-        # the above two parameters are for PG-TS only
         'step_size': [0.01, 0.05, 0.1, 0.5, 1, 5, 10],
         'C': list(range(1,11)),
         'explore': [0.01, 0.1, 1, 5, 10],
@@ -74,8 +70,7 @@ times = {
     'ucb-glm': 0,
     'sgd-ts': 0,
     'gloc': 0,
-    'lts': 0,
-    'pg-ts': 0
+    'lts': 0
 }
 for i in range(rep):
     print(i, ": ", end = " ")
@@ -83,38 +78,17 @@ for i in range(rep):
     bandit = yahoo(rewards, features, d)
     gridsearch = GridSearch(parameters)
     
-    t0 = time.time()
     reg_ucbglm += gridsearch.tune_ucbglm(bandit, dist, T, d, model)
-    times['ucb-glm'] += (time.time()-t0) / 50
-    
-    t0 = time.time()
     reg_sgdts += gridsearch.tune_sgdts(bandit, dist, T, d, model)
-    times['sgd-ts'] += (time.time()-t0) / 1750
-    
-    t0 = time.time()
     reg_gloc += gridsearch.tune_gloc(bandit, dist, T, d, model)
-    times['gloc'] += (time.time()-t0) / 245
-    
-    t0 = time.time()
-    reg_pgts += gridsearch.tune_pgts(bandit, dist, T, d, model)
-    times['pg-ts'] += (time.time()-t0) / 110
-    
-    t0 = time.time()
     reg_lts += gridsearch.tune_laplacets(bandit, dist, T, d, model)
-    times['lts'] += (time.time()-t0) / 7
-    print(times)
-    # print('cost {} minutes'.format( (time.time() - t0)/60 ))
-
-for k in times:
-    times[k] /= rep
-print('average time: ', times)
+    print( reg_ucbglm[-1], reg_sgdts[-1], reg_gloc[-1], reg_lts[-1] )
 
 result = {
     'ucb-glm': reg_ucbglm/rep,
     'sgd-ts': reg_sgdts/rep,
     'gloc': reg_gloc/rep,
-    'lts': reg_lts/rep,
-    'pg-ts': reg_pgts/rep
+    'lts': reg_lts/rep
 }
 
 name = 'yahoo'

@@ -116,29 +116,17 @@ reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
 reg_gloc = np.zeros(T)
-reg_pgts = np.zeros(T)
 fre_sgdts = []
 fre_lts = []
 fre_ucbglm = []
 fre_gloc = []
-fre_pgts = []
 parameters = {
-        'bc': np.arange(0, 1.1, 0.1),
-        'Bc': np.arange(0.1, 1.1, 0.1),
-        # the above two parameters are for PG-TS only
         'step_size': [0.01, 0.05, 0.1, 0.5, 1, 5, 10],
         'C': list(range(1,11)),
         'explore': [0.01, 0.1, 1, 5, 10],
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
 
-times = {
-    'ucb-glm': 0,
-    'sgd-ts': 0,
-    'gloc': 0,
-    'lts': 0,
-    'pg-ts': 0
-}
 for i in range(rep):
     print(i, ": ", end = " ")
     np.random.seed(i+1)
@@ -150,56 +138,36 @@ for i in range(rep):
         
     gridsearch = GridSearch(parameters)
     
-    t0 = time.time()
     reg = gridsearch.tune_ucbglm(bandit, dist, T, d, model)
-    times['ucb-glm'] += (time.time()-t0) / 50
     reg_ucbglm += reg
     fre_ucbglm.append(frequency(reg))
     
-    t0 = time.time()
     reg = gridsearch.tune_sgdts(bandit, dist, T, d, model)
-    times['sgd-ts'] += (time.time()-t0) / 1750
     reg_sgdts += reg
     fre_sgdts.append(frequency(reg))
     
-    t0 = time.time()
     reg = gridsearch.tune_gloc(bandit, dist, T, d, model)
-    times['gloc'] += (time.time()-t0) / 245
     reg_gloc += reg
     fre_gloc.append(frequency(reg))
     
-    t0 = time.time()
-    reg = gridsearch.tune_pgts(bandit, dist, T, d, model)
-    times['pg-ts'] += (time.time()-t0) / 110
-    reg_pgts += reg
-    fre_pgts.append(frequency(reg))
-    
-    t0 = time.time()
     reg = gridsearch.tune_laplacets(bandit, dist, T, d, model)
-    times['lts'] += (time.time()-t0) / 7
     reg_lts += reg
     fre_lts.append(frequency(reg))
-    # print('cost {} minutes'.format( (time.time() - t0)/60 ))
-    print(times)
+    print( reg_ucbglm[-1], reg_sgdts[-1], reg_gloc[-1], reg_lts[-1] )
 
-for k in times:
-    times[k] /= rep
-print('average time: ', times)
 
 result = {
     'ucb-glm': reg_ucbglm/rep,
     'sgd-ts': reg_sgdts/rep,
     'gloc': reg_gloc/rep,
-    'lts': reg_lts/rep,
-    'pg-ts': reg_pgts/rep
+    'lts': reg_lts/rep
 }
 
 frequent = {
     'ucb-glm': fre_ucbglm,
     'sgd-ts': fre_sgdts,
     'gloc': fre_gloc,
-    'lts': fre_lts,
-    'pg-ts': fre_pgts
+    'lts': fre_lts
 }
 
 # save the averaged regret for four algorithms in the directory 'results/name', where name is specified below
