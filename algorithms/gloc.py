@@ -32,6 +32,9 @@ class GLOC:
             if ite%100 == 0:
                 eta /= 2
             theta -= eta * grad
+            n = np.linalg.norm(theta)
+            if n>S:
+                theta /= (n/S)
         return theta
     def Gloc(self, c, k, eta, S = 1, lamda = 1, eps = 1):
         T = self.T
