@@ -10,7 +10,6 @@ from algorithms.sgd_ts import SGD_TS
 from algorithms.UCB import UCB
 from algorithms.laplace_ts import LAPLACE_TS
 from algorithms.gloc import GLOC
-from algorithms.pg_ts import PG_TS_stream
 
 class GridSearch:
     def __init__(self, paras):
