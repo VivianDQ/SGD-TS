@@ -10,6 +10,7 @@ from algorithms.sgd_ts import SGD_TS
 from algorithms.UCB import UCB
 from algorithms.laplace_ts import LAPLACE_TS
 from algorithms.gloc import GLOC
+from algorithms.pg_ts import PG_TS_stream
 
 class GridSearch:
     def __init__(self, paras):
@@ -58,6 +59,17 @@ class GridSearch:
             if tmp[-1] < best:
                 best = tmp[-1]
                 reg = tmp
+        return reg
+    def tune_pgts(self, bandit, dist, T, d, model):
+        pgts = PG_TS_stream(bandit, model, dist, T)
+        best = float('Inf')
+        reg = None
+        for bc in self.paras['bc']:
+            for Bc in self.paras['Bc']:
+                tmp = pgts.pg_ts(bc, Bc)
+                if tmp[-1] < best:
+                    best = tmp[-1]
+                    reg = tmp
         return reg
 
 

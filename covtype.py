@@ -17,6 +17,7 @@ from algorithms.sgd_ts import SGD_TS
 from algorithms.UCB import UCB
 from algorithms.laplace_ts import LAPLACE_TS
 from algorithms.gloc import GLOC
+from algorithms.pg_ts import PG_TS_stream
 from tune import GridSearch
 from algorithms.data_processor.data_generator import * 
 
@@ -115,11 +116,16 @@ reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
 reg_gloc = np.zeros(T)
+reg_pgts = np.zeros(T)
 fre_sgdts = []
 fre_lts = []
 fre_ucbglm = []
 fre_gloc = []
+fre_pgts = []
 parameters = {
+        'bc': np.arange(0, 1.1, 0.1),
+        'Bc': np.arange(0.1, 1.1, 0.1),
+        # the above two parameters are for PG-TS only
         'step_size': [0.01, 0.05, 0.1, 0.5, 1, 5, 10],
         'C': list(range(1,11)),
         'explore': [0.01, 0.1, 1, 5, 10],
@@ -130,7 +136,8 @@ times = {
     'ucb-glm': 0,
     'sgd-ts': 0,
     'gloc': 0,
-    'lts': 0
+    'lts': 0,
+    'pg-ts': 0
 }
 for i in range(rep):
     print(i, ": ", end = " ")
@@ -162,6 +169,12 @@ for i in range(rep):
     fre_gloc.append(frequency(reg))
     
     t0 = time.time()
+    reg = gridsearch.tune_pgts(bandit, dist, T, d, model)
+    times['pg-ts'] += (time.time()-t0) / 110
+    reg_pgts += reg
+    fre_pgts.append(frequency(reg))
+    
+    t0 = time.time()
     reg = gridsearch.tune_laplacets(bandit, dist, T, d, model)
     times['lts'] += (time.time()-t0) / 7
     reg_lts += reg
@@ -177,14 +190,16 @@ result = {
     'ucb-glm': reg_ucbglm/rep,
     'sgd-ts': reg_sgdts/rep,
     'gloc': reg_gloc/rep,
-    'lts': reg_lts/rep
+    'lts': reg_lts/rep,
+    'pg-ts': reg_pgts/rep
 }
 
 frequent = {
     'ucb-glm': fre_ucbglm,
     'sgd-ts': fre_sgdts,
     'gloc': fre_gloc,
-    'lts': fre_lts
+    'lts': fre_lts,
+    'pg-ts': fre_pgts
 }
 
 # save the averaged regret for four algorithms in the directory 'results/name', where name is specified below
