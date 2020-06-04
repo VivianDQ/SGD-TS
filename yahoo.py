@@ -65,18 +65,13 @@ parameters = {
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
 
-times = {
-    'ucb-glm': 0,
-    'sgd-ts': 0,
-    'gloc': 0,
-    'lts': 0
-}
+print('start running bandit algorithms')
+print('# of repeats: cumulative regret of {ucb-glm, sgd-ts, gloc, laplace-ts}')
 for i in range(rep):
     print(i, ": ", end = " ")
     np.random.seed(i+1)
     bandit = yahoo(rewards, features, d)
     gridsearch = GridSearch(parameters)
-    
     reg_ucbglm += gridsearch.tune_ucbglm(bandit, dist, T, d, model)
     reg_sgdts += gridsearch.tune_sgdts(bandit, dist, T, d, model)
     reg_gloc += gridsearch.tune_gloc(bandit, dist, T, d, model)

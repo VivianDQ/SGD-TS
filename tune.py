@@ -59,18 +59,6 @@ class GridSearch:
                 best = tmp[-1]
                 reg = tmp
         return reg
-    def tune_pgts(self, bandit, dist, T, d, model):
-        pgts = PG_TS_stream(bandit, model, dist, T)
-        best = float('Inf')
-        reg = None
-        for bc in self.paras['bc']:
-            for Bc in self.paras['Bc']:
-                tmp = pgts.pg_ts(bc, Bc)
-                if tmp[-1] < best:
-                    best = tmp[-1]
-                    reg = tmp
-        return reg
-
 
 
 

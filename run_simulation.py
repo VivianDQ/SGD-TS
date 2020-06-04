@@ -23,9 +23,9 @@ import warnings
 warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
 parser = argparse.ArgumentParser(description='simulations')
-parser.add_argument('-t', '--t', type=int, help = 'total time')
-parser.add_argument('-d', '--d', type=int, help = 'dimension')
-parser.add_argument('-k', '--k', type=int, help = 'number of arms')
+parser.add_argument('-t', '--t', type=int, default = 1000, help = 'total time')
+parser.add_argument('-d', '--d', type=int, default = 6, help = 'dimension')
+parser.add_argument('-k', '--k', type=int, default = 100, help = 'number of arms')
 parser.add_argument('-rep', '--rep', type=int, default = 10, help = 'repeat times')
 args = parser.parse_args()
 
@@ -58,10 +58,13 @@ parameters = {
         'explore': [0.01, 0.1, 1, 5, 10], # total 5
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
+
+print('start running bandit algorithms')
+print('# of repeats: cumulative regret of {ucb-glm, sgd-ts, gloc, laplace-ts}')
 for i in range(rep):
     print(i, ": ", end = " ")
     np.random.seed(i+1)
-    theta = np.random.normal(0.1, 1, d)
+    theta = np.random.uniform(lb, ub, d)
     bandit = context(K, lb, ub, T, d, true_theta = theta)
     bandit.build_bandit(model)
     gridsearch = GridSearch(parameters)

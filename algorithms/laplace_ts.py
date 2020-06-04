@@ -24,7 +24,7 @@ class LAPLACE_TS:
         return g
     def optimize(self, w, m, q, X, y, eta, max_ite):
         d = self.d
-        w = np.zeros(d)
+        w = np.random.uniform(-1,1,d) + m
         for i in range(max_ite):
             grad = self.grad(w, q, m, X, y)
             grad_norm = np.linalg.norm(grad)

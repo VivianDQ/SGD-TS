@@ -17,7 +17,7 @@ Make sure your ``scikit-learn`` version is above ``0.21.2``. Otherwise, ``sklear
 To get the results of simulation in the paper, run the following command:
 
 ```
-python3 run_simulation.py -k 100 -d 6 -t 1000
+python3 run_simulation.py
 ```
 
 ## Experiments on Forest cover type data
@@ -29,13 +29,13 @@ The experiments on this dataset have two scenarios:
 - Use only the quantitative features and the feature vectors are set to cluster centroids. To get the results, run the following command:
 
 ```
-python3 covtype.py -d 10 -t 1000
+python3 covtype.py -d 10
 ```
 
 - Use both quantitative and categorical features and the feature vectors are randomly chosen from the cluster. To get the results, run the following command:
 
 ```
-python3 covtype.py -d 55 -t 1000 -center 0 -add 1
+python3 covtype.py -d 55 -center 0
 ```
 
 ## Experiments on Yahoo! Today news artical recommendation data
@@ -63,7 +63,7 @@ Our implementations will automatically create a ``results`` folder. Numerical re
 
 - Simulation results are saved in ``results/simulations_d6_k100`` folder.
 
-- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d56`` folder respectively. The frequencies of draws for best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d56`` folder.
+- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d55`` folder respectively. The frequencies of draws for best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d55`` folder.
 
 - For Yahoo data, results are saved in ``results/yahoo`` folder.
 

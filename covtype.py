@@ -31,9 +31,9 @@ simplefilter("ignore", category=ConvergenceWarning)
 
 parser = argparse.ArgumentParser(description='experiments for cover type data')
 parser.add_argument('-rep', '--rep', type=int, default = 10, help = 'repeat times')
-parser.add_argument('-t', '--t', type=int, help = 'total time')
+parser.add_argument('-t', '--t', type=int, default = 1000, help = 'total time')
 parser.add_argument('-d', '--d', type=int, default = 10, help = 'number of features, choice of 10 (not use categorical features), 55 (use cat)')
-parser.add_argument('-center', '--center', type=int, default = 1, help = 'use centriods as features')
+parser.add_argument('-center', '--center', type=int, default = 1, help = 'use centriods as features (1), random feature (0)')
 parser.add_argument('-add', '--add', type=int, default = 0, help = 'add a constant column feature')
 
 args = parser.parse_args()
@@ -75,7 +75,7 @@ else:
     X_add = X
 
 np.random.seed(0)
-kmeans = KMeans(n_clusters=32, random_state=0).fit(X_add)
+kmeans = KMeans(n_clusters=32, random_state=1).fit(X_add)
 rewards = [0]*32
 idx = [None for _ in range(32)]
 features = np.array(kmeans.cluster_centers_)
@@ -109,7 +109,6 @@ dist = 'ber'
 if dist != 'ber' and model == 'logistic':
     raise NameError('logistic regression only supports bernoulli reward')
 
-
 print('K: {}, T: {}, dimension: {}, model: {}, dist: {}'.format(K, T, d, model, dist)) 
 reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
@@ -125,7 +124,8 @@ parameters = {
         'explore': [0.01, 0.1, 1, 5, 10],
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
-
+print('start running bandit algorithms')
+print('# of repeats: cumulative regret of {ucb-glm, sgd-ts, gloc, laplace-ts}')
 for i in range(rep):
     print(i, ": ", end = " ")
     np.random.seed(i+1)
