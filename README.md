@@ -63,7 +63,7 @@ Our implementations will automatically create a ``results`` folder. Numerical re
 
 - Simulation results are saved in ``results/simulations_d6_k100`` folder.
 
-- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d55`` folder respectively. The frequencies of draws for best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d55`` folder.
+- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d55_rf`` folder respectively. The frequencies of draws for best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d55_rf`` folder.
 
 - For Yahoo data, results are saved in ``results/yahoo`` folder.
 
