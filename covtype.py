@@ -118,7 +118,6 @@ reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
 reg_gloc = np.zeros(T)
-# add three methods
 reg_tsl = np.zeros(T)
 reg_supcb = np.zeros(T)
 reg_eps = np.zeros(T)
@@ -127,7 +126,6 @@ fre_sgdts = []
 fre_lts = []
 fre_ucbglm = []
 fre_gloc = []
-# add three methods
 fre_tsl = []
 fre_supcb = []
 fre_eps = []

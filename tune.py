@@ -88,7 +88,6 @@ class GridSearch:
                 reg = tmp
         return reg, tbest
     
-    # for rebuttal
     def tune_glmtsl(self, bandit, dist, T, d, model):
         tsl = GLM_TSL(bandit, dist, T)
         best = float('Inf')

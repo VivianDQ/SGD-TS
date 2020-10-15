@@ -59,11 +59,11 @@ python3 yahoo.py
 
 ## Results
 
-Our implementations will automatically create a ``results`` folder. Numerical results on each data will automatically be saved in separate folder inside ``results`` folder. See the following for details.
+Our implementations will automatically create a ``results`` folder. Numerical results on each data will automatically be saved in separate folders inside ``results`` folder. See the following for details.
 
 - Simulation results are saved in ``results/simulations_d6_k100`` folder.
 
-- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d55_rf`` folder respectively. The frequencies of draws for best six arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d55_rf`` folder.
+- For forest cover type data, the averaged regrets of algorithms are saved in ``results/covtype_d10`` and ``results/covtype_d55_rf`` folder respectively. The frequencies of draws for best four arms are save in ``results/covtype_freq_d10`` and ``results/covtype_freq_d55_rf`` folder.
 
 - For Yahoo data, results are saved in ``results/yahoo`` folder.
 
@@ -74,5 +74,3 @@ To produce the same plots as in our paper, run the following command, it will cr
 ```
 python3 plot.py
 ```
-
-
