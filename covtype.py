@@ -17,6 +17,9 @@ from algorithms.sgd_ts import SGD_TS
 from algorithms.UCB import UCB
 from algorithms.laplace_ts import LAPLACE_TS
 from algorithms.gloc import GLOC
+from algorithms.supcb_glm import SupCB_GLM
+from algorithms.glmtsl import GLM_TSL
+from algorithms.eps_greedy import Eps_Greedy
 from tune import GridSearch
 from algorithms.data_processor.data_generator import * 
 
@@ -110,20 +113,42 @@ if dist != 'ber' and model == 'logistic':
     raise NameError('logistic regression only supports bernoulli reward')
 
 print('K: {}, T: {}, dimension: {}, model: {}, dist: {}'.format(K, T, d, model, dist)) 
+
 reg_sgdts = np.zeros(T)
 reg_ucbglm = np.zeros(T) 
 reg_lts = np.zeros(T)
 reg_gloc = np.zeros(T)
+# add three methods
+reg_tsl = np.zeros(T)
+reg_supcb = np.zeros(T)
+reg_eps = np.zeros(T)
+
 fre_sgdts = []
 fre_lts = []
 fre_ucbglm = []
 fre_gloc = []
+# add three methods
+fre_tsl = []
+fre_supcb = []
+fre_eps = []
+
 parameters = {
         'step_size': [0.01, 0.05, 0.1, 0.5, 1, 5, 10],
         'C': list(range(1,11)),
         'explore': [0.01, 0.1, 1, 5, 10],
         'stability': 10**(-6) # initialize matrix V_t = 10**(-6) * identity matrix to ensure the stability of inverse (UCB-GLM)
     }
+
+times = {
+    'ucbglm': 0,
+    'sgdts': 0,
+    'gloc': 0,
+    'lts': 0,
+    'tsl': 0,
+    'supcb': 0,
+    'eps': 0,
+}
+
 print('start running bandit algorithms')
 print('# of repeats: cumulative regret of {ucb-glm, sgd-ts, gloc, laplace-ts}')
 for i in range(rep):
@@ -136,37 +161,66 @@ for i in range(rep):
         bandit.build_bandit()  
         
     gridsearch = GridSearch(parameters)
-    
-    reg = gridsearch.tune_ucbglm(bandit, dist, T, d, model)
+
+    reg, seconds = gridsearch.tune_ucbglm(bandit, dist, T, d, model)
     reg_ucbglm += reg
+    times['ucbglm'] += seconds
     fre_ucbglm.append(frequency(reg))
     
-    reg = gridsearch.tune_sgdts(bandit, dist, T, d, model)
+    reg, seconds = gridsearch.tune_sgdts(bandit, dist, T, d, model)
     reg_sgdts += reg
+    times['sgdts'] += seconds
     fre_sgdts.append(frequency(reg))
     
-    reg = gridsearch.tune_gloc(bandit, dist, T, d, model)
+    reg, seconds = gridsearch.tune_gloc(bandit, dist, T, d, model)
     reg_gloc += reg
+    times['gloc'] += seconds
     fre_gloc.append(frequency(reg))
     
-    reg = gridsearch.tune_laplacets(bandit, dist, T, d, model)
+    reg, seconds = gridsearch.tune_laplacets(bandit, dist, T, d, model)
     reg_lts += reg
+    times['lts'] += seconds
     fre_lts.append(frequency(reg))
-    print( reg_ucbglm[-1], reg_sgdts[-1], reg_gloc[-1], reg_lts[-1] )
 
+    reg, seconds = gridsearch.tune_glmtsl(bandit, dist, T, d, model)
+    reg_tsl += reg
+    times['tsl'] += seconds
+    fre_tsl.append(frequency(reg))
+
+    reg, seconds = gridsearch.tune_supcb(bandit, dist, T, d, model)
+    reg_supcb += reg
+    times['supcb'] += seconds
+    fre_supcb.append(frequency(reg))
+    
+    reg, seconds = gridsearch.tune_epsgreedy(bandit, dist, T, d, model)
+    reg_eps += reg
+    times['eps'] += seconds
+    fre_eps.append(frequency(reg))
+    
+    print( reg_ucbglm[-1], reg_sgdts[-1], reg_gloc[-1], reg_lts[-1], reg_tsl[-1], reg_supcb[-1], reg_eps[-1] )
+
+for k in times.keys():
+    times[k] /= rep
+print(times)
 
 result = {
     'ucb-glm': reg_ucbglm/rep,
     'sgd-ts': reg_sgdts/rep,
     'gloc': reg_gloc/rep,
-    'lts': reg_lts/rep
+    'lts': reg_lts/rep,
+    'tsl': reg_tsl/rep,
+    'supcb': reg_supcb/rep,
+    'eps': reg_eps/rep,
 }
 
 frequent = {
     'ucb-glm': fre_ucbglm,
     'sgd-ts': fre_sgdts,
     'gloc': fre_gloc,
-    'lts': fre_lts
+    'lts': fre_lts,
+    'tsl': fre_tsl,
+    'supcb': fre_supcb,
+    'eps': fre_eps,
 }
 
 # save the averaged regret for four algorithms in the directory 'results/name', where name is specified below
@@ -177,6 +231,7 @@ if not os.path.exists('results/'):
     os.mkdir('results/')
 if not os.path.exists('results/' + name + '/'):
     os.mkdir('results/' + name + '/')
+    
 for k,v in result.items():
     np.savetxt('results/' + name + '/' + k, v)       
 
@@ -188,6 +243,6 @@ if not os.path.exists('results/'):
     os.mkdir('results/')
 if not os.path.exists('results/' + name + '/'):
     os.mkdir('results/' + name + '/')
+
 for k,v in frequent.items():
     np.savetxt('results/' + name + '/' + k, v)  
-

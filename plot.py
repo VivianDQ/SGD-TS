@@ -8,12 +8,15 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plot
 from matplotlib import pylab
 
-def plot_frequency(path):
+def plot_frequency(path, d):
     frequent = {
-    'sgd-ts': [0, 'SGD-TS', 'C3'],
-    'ucb-glm': [0, 'UCB-GLM', 'C2'],
-    'gloc': [0, 'GLOC', 'C1'],
-    'lts': [0, 'Laplace-TS', 'C0']
+        'sgd-ts': [0, 'SGD-TS', 'C3'],
+        'ucb-glm': [0, 'UCB-GLM', 'C2'],
+        'gloc': [0, 'GLOC', 'C1'],
+        'lts': [0, 'Laplace-TS', 'C0'],
+        'tsl': [0, 'GLM-TSL', 'C4'],
+        'supcb': [0, 'SupCB-GLM', 'C6'],   
+        'eps': [0, 'Eps-Greedy', 'C7'],
     }
     fn = path.split('/')[-2]
     fn_split = fn.split('_')
@@ -21,10 +24,10 @@ def plot_frequency(path):
     for k in frequent.keys():
         tmp = np.loadtxt(path + k)
         frequent[k][0] = tmp 
-    max_arm = 6
+    max_arm = 4
     labels = [str(i+1) for i in range(max_arm)]
     x = np.arange(len(labels)) 
-    width = 0.12  
+    width = 0.08
     fig = plot.figure(figsize=(6,4))
     start = x - width/2
     count = 0
@@ -38,8 +41,8 @@ def plot_frequency(path):
         count += 1
     plot.ylabel('Frequency')
     plot.xlabel('Arm')
-    plot.title('number of times algorithm pulls arm 1-{}'.format(max_arm))
-    plot.xticks(x + width*1, labels)
+    plot.title('number of times algorithm pulls arm 1-{} (d = {})'.format(max_arm, d))
+    plot.xticks(x + width*2, labels)
     plot.legend(frameon=False)
     if not os.path.exists('plots/'):
         os.mkdir('plots/')
@@ -50,13 +53,19 @@ def draw_figure():
             'ucb-glm': ['-.', 'green', 'UCB-GLM'],
             'sgd-ts': ['-', 'red', 'SGD-TS'],
             'gloc': ['--', 'orange', 'GLOC'],
-            'lts': [':', 'blue', 'Laplace-TS']
+            'lts': [':', 'blue', 'Laplace-TS'],
+            'tsl': ['--', 'purple', 'GLM-TSL'],
+            'supcb': ['--', 'pink', 'SupCB-GLM'],  
+            'eps': ['--', 'gray', 'Eps-Greedy'],
         }
     plot_prior = {
             'sgd-ts': 1,
             'ucb-glm': 2,
             'gloc': 3,
-            'lts': 4
+            'lts': 4,
+            'tsl': 5,
+            'supcb': 6,
+            'eps': 7,
         }
     root = 'results/'
     if not os.path.exists('plots/'):
@@ -71,7 +80,8 @@ def draw_figure():
     for path in paths:
         fn = path.split('/')[-2]
         if 'freq' in fn: 
-            plot_frequency(path)
+            d = int(fn.split('_')[2][1:])
+            plot_frequency(path, d)
             continue
         if 'yahoo' in fn:
             title = 'News Article Recommendation Data'
@@ -108,7 +118,7 @@ def draw_figure():
                 T -= 1
                 y_label = 'Click Through Rate / time'
             plot.plot((list(range(T))), data, linestyle = plot_style[key][0], color = plot_style[key][1], linewidth = 2)
-        plot.legend((leg), loc='best', fontsize=16, frameon=False)
+        plot.legend((leg), loc='best', fontsize=12, frameon=False)
         plot.xlabel('Iterations')
         if 'yahoo' in path:
             dates = ['May0'+str(i) for i in range(1,10)] + ['May10'] + ['May11']
